@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Flights</title>
+		<link rel="stylesheet" href="/stylesheets/style.css" />
+	</head>
+	<body>
+        <%- include('../partials/header') %>
+		<% flights.forEach( flight => { %>
+		<div class="flights">
+			<div>
+				<span class="labels">Airport:</span>
+				<%= flight.airport %>
+			</div>
+			<div>
+				<span class="labels">Airlines:</span>
+				<%= flight.airline %>
+			</div>
+			<div>
+				<span class="labels">Flight Number:</span>
+				<%= flight.flightNo %>
+			</div>
+			<div>
+				<span class="labels">Date of Departure:</span>
+                <% if(new Date(flight.departs) < new Date()) {%>
+                <span class="red">
+                <% }else {%>
+                <span>
+                <% }; %> 
+                <%= new Date(flight.departs).toDateString() %>, 
+                <%= new Date(flight.departs).toLocaleTimeString() %>
+                </span>
+			</div>
+		</div>
+		<% }) %>
+	</body>
+</html>

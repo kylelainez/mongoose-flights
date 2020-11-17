@@ -23,8 +23,9 @@ const flightSchema = new mongoose.Schema({
 			let year = date.getFullYear() + 1;
 			let month = date.getMonth();
 			let day = date.getDate();
-
-			return new Date(year, month, day);
+			let hour = date.getHours();
+			let minute = date.getMinutes();
+			return new Date(year, month, day, hour - 8, minute);
 		}
 	}
 });
