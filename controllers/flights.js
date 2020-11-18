@@ -3,7 +3,10 @@ const Flights = require('../models/flights');
 module.exports = {
 	getAll,
 	new: newFlight,
-	addFlight
+	addFlight,
+	show,
+	addDest,
+	deleteDest
 };
 
 function getAll(req, res) {
@@ -16,9 +19,8 @@ function getAll(req, res) {
 
 function newFlight(req, res) {
 	const newFl = new Flights();
-	let date = newFl.departs;
 	res.render('flights/new', {
-		date: date.toISOString().slice(0, 16)
+		date: newFl.departs.toISOString().slice(0, 16)
 	});
 }
 
@@ -29,5 +31,44 @@ function addFlight(req, res) {
 		if (err) return res.redirect('/movies/new');
 
 		res.redirect('/flights');
+	});
+}
+
+function show(req, res) {
+	const arrivalAirports = ['AUS', 'DFW', 'DEN', 'LAX', 'SAN'];
+	Flights.findById(req.params.id, function (err, flight) {
+		flight.destinations.forEach((el, idx) => {
+			if (arrivalAirports.includes(el.airport)) {
+				arrivalAirports.splice(
+					arrivalAirports.findIndex((elem) => elem === el.airport),
+					1
+				);
+			}
+		});
+		res.render('flights/show', { flight, arrivalAirports });
+	});
+}
+
+function addDest(req, res) {
+	if (req.body.airport === undefined) {
+		return res.redirect(`/flights/${req.params.id}`);
+	}
+	Flights.findById(req.params.id, function (err, flight) {
+		flight.destinations.push(req.body);
+		flight.destinations = flight.destinations.sort(
+			(a, b) => a.arrival - b.arrival
+		);
+		flight.save(function (err) {
+			res.redirect(`/flights/${req.params.id}`);
+		});
+	});
+}
+
+function deleteDest(req, res) {
+	Flights.findById(req.params.id, function (err, flight) {
+		flight.destinations.pull(req.params.destination);
+		flight.save(function (err) {
+			res.redirect(`/flights/${req.params.id}`);
+		});
 	});
 }
