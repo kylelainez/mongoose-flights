@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>New Ticket</title>
+		<link rel="stylesheet" href="/stylesheets/style.css" />
+	</head>
+	<body>
+		<%- include('../partials/header') %>
+		<form method="POST" action="/flights/<%= flights %>/new_ticket">
+			<label for="seat">Seat: </label>
+			<input name="seat" required pattern="[A-F][1-9]\d?" required />
+			<label for="price">Price: </label>
+			<input
+				name="price"
+				type="number"
+				min="0"
+				onkeydown="return event.keyCode !== 69"
+				required
+			/>
+			<button type="submit">Confirm</button>
+		</form>
+	</body>
+</html>

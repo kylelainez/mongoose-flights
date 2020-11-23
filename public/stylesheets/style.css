@@ -47,3 +47,11 @@ header {
 	position: absolute;
 	height: 40px;
 }
+label {
+	display: block;
+	padding: 10px 0;
+}
+button {
+	display: block;
+	margin: 10px 0;
+}

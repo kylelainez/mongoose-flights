@@ -33,8 +33,30 @@
                 </span>
             </div>
             <br>
+            
             <div>
-                <span class="labels">Destination:</span>
+                <h2>Tickets:</h2>
+                <a href="/flights/<%= flight._id %>/new_ticket" style='padding:0'>Add Ticket</a>
+                <div>
+                    <% tickets.forEach(ticket =>{ %>
+                        <div>
+                            <span class="labels">Seat: </span>
+                            <%= ticket.seat %> 
+                            <br>
+                            <span class="labels">Price: </span>
+                            <%= ticket.price %> 
+                            <br>
+                            <form method="POST" action="/flights/<%= flight._id %>/ticket/<%= ticket._id %>?_method=DELETE">
+                                <button types="submit">Remove</button>
+                            </form>
+                        </div>
+                       
+                    <% }); %> 
+                </div>
+            </div>
+
+            <div>
+                <h2>Destinations:</h2>
                 <br>
                 <% flight.destinations.forEach(destination => { %> 
                     <div>
@@ -55,19 +77,20 @@
                     <form method="POST" action="/flights/<%= flight._id %>/<%= destination._id %>?_method=DELETE">
                         <button types="submit">Remove</button>
                     </form>
-                   <br>
+                <br>
                 <% }); %> 
             </div>
-            
-            <form method="POST" action="/flights/<%= flight._id %>?_method=PUT" autocomplete="off">
-                <select name="airport">
-                    <% arrivalAirports.forEach(airport => { %> 
-                        <option value="<%= airport %>"><%= airport %></option>
-                    <% }) %> 
-                </select>
-                <input type="datetime-local" name="arrival" value="<%= flight.departs.toISOString().slice(0, 16) %>"/>
-                <button type="submit">Add Destination</button>
-            </form>
+            <% if(arrivalAirports.length !== 0) { %> 
+                <form method="POST" action="/flights/<%= flight._id %>?_method=PUT" autocomplete="off">
+                    <select name="airport">
+                        <% arrivalAirports.forEach(airport => { %> 
+                            <option value="<%= airport %>"><%= airport %></option>
+                        <% }) %> 
+                    </select>
+                    <input type="datetime-local" name="arrival" value="<%= flight.departs.toISOString().slice(0, 16) %>"/>
+                    <button type="submit">Add Destination</button>
+                </form>
+            <% } %> 
 		</div>
 	</body>
 </html>

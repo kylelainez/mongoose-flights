@@ -4,9 +4,10 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>New Flight</title>
-		<link rel="stylesheet" href="/public/stylesheets/style.css" />
+		<link rel="stylesheet" href="/stylesheets/style.css" />
 	</head>
 	<body>
+		<%- include('../partials/header') %>
 		<form method="POST" autocomplete="off" action="/flights">
 			<label for="airline">Choose Airline:</label>
 			<select name="airline">

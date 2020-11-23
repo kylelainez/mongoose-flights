@@ -1,4 +1,5 @@
 const Flights = require('../models/flights');
+const Tickets = require('../models/ticket');
 
 module.exports = {
 	getAll,
@@ -6,7 +7,10 @@ module.exports = {
 	addFlight,
 	show,
 	addDest,
-	deleteDest
+	deleteDest,
+	newTicket,
+	addTicket,
+	deleteTicket
 };
 
 function getAll(req, res) {
@@ -45,7 +49,9 @@ function show(req, res) {
 				);
 			}
 		});
-		res.render('flights/show', { flight, arrivalAirports });
+		Tickets.find({ flight: flight._id }, function (err, tickets) {
+			res.render('flights/show', { flight, arrivalAirports, tickets });
+		});
 	});
 }
 
@@ -70,5 +76,24 @@ function deleteDest(req, res) {
 		flight.save(function (err) {
 			res.redirect(`/flights/${req.params.id}`);
 		});
+	});
+}
+
+function newTicket(req, res) {
+	res.render('flights/newTicket', { flights: req.params.id });
+}
+
+function addTicket(req, res) {
+	req.body.flight = req.params.id;
+	const newTick = new Tickets(req.body);
+	newTick.save(function (err) {
+		res.redirect(`/flights/${req.params.id}`);
+	});
+}
+
+function deleteTicket(req, res) {
+	Tickets.deleteOne({ _id: req.params.ticket_id }, function (err) {
+		if (err) console.log(err);
+		res.redirect(`/flights/${req.params.id}`);
 	});
 }
